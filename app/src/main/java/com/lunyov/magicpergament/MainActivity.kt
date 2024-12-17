@@ -27,6 +27,17 @@ class MainActivity : AppCompatActivity() {
         "Завтра будет день, полный возможностей"
     )
 
+    private fun formatTextIntoTwoLines(text: String): String {
+        val words = text.split(" ")
+        val midPoint = words.size / 2
+
+        // Формируем первую и вторую строку
+        val firstLine = words.subList(0, midPoint).joinToString(" ")
+        val secondLine = words.subList(midPoint, words.size).joinToString(" ")
+
+        return "$firstLine\n$secondLine"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,7 +45,13 @@ class MainActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         imageView = findViewById(R.id.imageView)
 
-        // Устанавливаем магический шрифт
+        // Устанавливаем текст с переносом
+        val initialText = "Подумай о чём хочешь спросить и нажми, чтобы узнать будущее"
+        textView.text = formatTextIntoTwoLines(initialText)
+
+
+
+    // Устанавливаем магический шрифт
         val customFont = ResourcesCompat.getFont(this, R.font.greatvibes)
         textView.typeface = customFont
 
@@ -54,6 +71,8 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this, R.raw.magic_sound)
         mediaPlayer?.start()
     }
+
+
 
     private fun displayPredictionWithTypingEffect(prediction: String) {
         val charArray = prediction.toCharArray()
