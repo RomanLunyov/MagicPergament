@@ -29,17 +29,6 @@ class MainActivity : AppCompatActivity() {
         "Завтра будет день, полный возможностей"
     )
 
-    private fun formatTextIntoTwoLines(text: String): String {
-        val words = text.split(" ")
-        val midPoint = words.size / 2
-
-        // Формируем первую и вторую строку
-        val firstLine = words.subList(0, midPoint).joinToString(" ")
-        val secondLine = words.subList(midPoint, words.size).joinToString(" ")
-
-        return "$firstLine\n$secondLine"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         val initialText = "Подумай о чём хочешь спросить \n и нажми, чтобы узнать ответ"
         displayTextWithTypingEffect(initialText)
 
+        // Воспроизведение фоновой музыки
+        playBackgroundMusic()
+
         // Устанавливаем обработчик клика на картинку
         imageView.setOnClickListener {
             textView.text = "" // Очищаем текст
@@ -65,13 +57,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun playBackgroundMusic() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.magic_background_music)
+        mediaPlayer?.isLooping = true // Зациклить музыку
+        mediaPlayer?.start()
+    }
+
+    private fun stopBackgroundMusic() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
     private fun getRandomPrediction(): String {
         return predictions.random()
     }
 
     private fun playMagicSound() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.magic_sound)
-        mediaPlayer?.start()
+        val soundPlayer = MediaPlayer.create(this, R.raw.magic_sound)
+        soundPlayer.setOnCompletionListener { it.release() }
+        soundPlayer.start()
     }
 
     private fun displayTextWithTypingEffect(text: String) {
@@ -135,6 +140,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.release()
+        stopBackgroundMusic()
     }
 }
