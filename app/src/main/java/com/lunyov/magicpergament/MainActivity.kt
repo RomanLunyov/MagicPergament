@@ -45,15 +45,13 @@ class MainActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         imageView = findViewById(R.id.imageView)
 
-        // Устанавливаем текст с переносом
-        val initialText = "Подумай о чём хочешь спросить и нажми, чтобы узнать будущее"
-        textView.text = formatTextIntoTwoLines(initialText)
-
-
-
-    // Устанавливаем магический шрифт
+        // Устанавливаем магический шрифт
         val customFont = ResourcesCompat.getFont(this, R.font.greatvibes)
         textView.typeface = customFont
+
+        // Анимация текста при запуске
+        val initialText = "Подумай о чём хочешь спросить \n и нажми, чтобы узнать ответ"
+        displayTextWithTypingEffect(initialText)
 
         // Устанавливаем обработчик клика на картинку
         imageView.setOnClickListener {
@@ -72,15 +70,29 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer?.start()
     }
 
+    private fun displayTextWithTypingEffect(text: String) {
+        val charArray = text.toCharArray()
+        var index = 0
+        val builder = StringBuilder()
 
+        val typingRunnable = object : Runnable {
+            override fun run() {
+                if (index < charArray.size) {
+                    builder.append(charArray[index])
+                    textView.text = builder.toString()
+                    index++
+                    handler.postDelayed(this, 100) // Задержка между символами
+                }
+            }
+        }
+        handler.post(typingRunnable)
+    }
 
     private fun displayPredictionWithTypingEffect(prediction: String) {
         val charArray = prediction.toCharArray()
         var index = 0
         val builder = StringBuilder()
 
-
-        // Запуск анимации вывода текста
         val typingRunnable = object : Runnable {
             override fun run() {
                 if (index < charArray.size) {
