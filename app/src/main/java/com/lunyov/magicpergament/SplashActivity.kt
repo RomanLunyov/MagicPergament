@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         splashContainer = findViewById(R.id.splashContainer)
 
         // Анимация текста
-        displayTextWithTypingEffect("Коснись свитка на столе, \n чтобы получить ответы")
+        displayTextWithTypingEffect("Коснись свитка на столе, \n чтобы узнать будущее")
 
         // Запуск фоновой музыки
         playBackgroundMusic()

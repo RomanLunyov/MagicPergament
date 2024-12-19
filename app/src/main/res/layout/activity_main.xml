@@ -29,7 +29,7 @@
         android:ellipsize="end"
         android:fontFamily="@font/greatvibes"
         android:gravity="center"
-        android:maxLines="2"
+        android:maxLines="10"
         android:padding="16dp"
         android:shadowColor="#FFA500"
         android:shadowDx="2"
