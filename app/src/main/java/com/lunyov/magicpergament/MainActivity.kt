@@ -1,10 +1,12 @@
 package com.lunyov.magicpergament
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 
@@ -57,7 +59,9 @@ class MainActivity : AppCompatActivity() {
         imageView.setOnClickListener {
             textView.text = "" // Очищаем текст
             playMagicSound()
-            displayPredictionWithTypingEffect(getRandomPrediction())
+            val prediction = getRandomPrediction()
+            displayPredictionWithTypingEffect(prediction)
+            addShareButton(prediction)
         }
     }
 
@@ -110,6 +114,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
         handler.post(typingRunnable)
+    }
+
+    private fun addShareButton(prediction: String) {
+        // Добавление кнопки поделиться
+        imageView.setOnLongClickListener {
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "Моё предсказание: \"$prediction\"")
+                type = "text/plain"
+            }
+            if (shareIntent.resolveActivity(packageManager) != null) {
+                startActivity(Intent.createChooser(shareIntent, "Поделиться предсказанием через"))
+            } else {
+                Toast.makeText(this, "Не удалось найти приложение для отправки", Toast.LENGTH_SHORT).show()
+            }
+            true
+        }
     }
 
     override fun onDestroy() {
